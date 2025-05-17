@@ -5,6 +5,7 @@ import (
 	"os"
 	"bytes"
 	"io"
+	"log"
 )
 
 type Person struct {
@@ -39,8 +40,9 @@ type Reader interface {
 func usage() {
 	fmt.Println("vcf-conv <input file> <output file>")
 	fmt.Println("    Supported file extensions:")
-	fmt.Println("    vcf,csv")
-	// fmt.Println("    ")
+	fmt.Println("    txt,vcf,csv")
+	fmt.Println("    Arguments:")
+	fmt.Println("      --sep <char> - a separator in txt file (default is the comma)")
 	os.Exit(0)
 }
 
@@ -59,6 +61,9 @@ func main() {
 	case "csv":
 		r = NewCSVReader(in)
 		defer r.Close()
+	case "txt":
+		r = NewTxtReader(in)
+		defer r.Close()
 	}
 
 	switch getFileExt(out) {
@@ -72,6 +77,8 @@ func main() {
 		if err == io.EOF {
 			break
 		}
+
+		log.Print(p)
 
 		for k, _ := range p.Phones {
 			p.FirstName = k
