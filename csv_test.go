@@ -8,7 +8,7 @@ func TestRead(t *testing.T) {
 	r := NewCSVReader("phones.csv")
 	defer r.Close()
 
-	p, _ := r.Read()
-	t.Log(p)
-	t.Fatal()
+	r.Read()
+	t.Log(r.Read())
+	t.Fail()
 }

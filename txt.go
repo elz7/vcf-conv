@@ -1,13 +1,15 @@
 package main
 
 import (
-	"bufio"
 	"os"
+	"io"
+	"bufio"
+	"strings"
 )
 
 type TxtReader struct {
-	File   *os.File
-	Reader *bufio.Reader
+	File    *os.File
+	Scanner *bufio.Scanner
 }
 
 func NewTxtReader(file string) TxtReader {
@@ -15,24 +17,18 @@ func NewTxtReader(file string) TxtReader {
 	if err != nil {
 		panic(err)
 	}
-	r := bufio.NewReader(f)
-	return TxtReader{
-		File:   f,
-		Reader: r,
-	}
+	s := bufio.NewScanner(f)
+	return TxtReader{f, s}
 }
 
-func (r TxtReader) Read() (Person, error) {
-	str, err := r.Reader.ReadString(byte(','))
-	if err != nil {
-		return Person{}, err
+func (txt TxtReader) Read() (Person, error) {
+	if !txt.Scanner.Scan() {
+		return Person{}, io.EOF
 	}
-	phones := make(map[string]string)
-	phones[str[:(len(str)-2)]] = "CELL"
-	return Person{
-		FirstName: str[:(len(str) - 2)],
-		Phones:    phones,
-	}, nil
+	str := txt.Scanner.Text()
+	fn, ln := get_rand_name(str)
+	ph := make_map(strings.Trim(str, ","), "CELL")
+	return Person{FirstName: fn, LastName: ln, Phones: ph}, nil
 }
 
 func (r TxtReader) Close() {

@@ -27,7 +27,7 @@ func main() {
 	var r Reader
 	var w Writer
 
-	switch getFileExt(in) {
+	switch get_file_ext(in) {
 	case "csv":
 		r = NewCSVReader(in)
 		defer r.Close()
@@ -36,7 +36,7 @@ func main() {
 		defer r.Close()
 	}
 
-	switch getFileExt(out) {
+	switch get_file_ext(out) {
 	case "vcf":
 		w = NewVCFWriter(out)
 		defer w.Close()
@@ -47,19 +47,12 @@ func main() {
 		if err == io.EOF {
 			break
 		}
-
 		log.Print(p)
-
-		for k, _ := range p.Phones {
-			p.FirstName = k
-			break
-		}
-
 		w.Write(p)
 	}
 }
 
-func getFileExt(file string) string {
+func get_file_ext(file string) string {
 	i := len(file) - 1
 	for file[i] != '.' {
 		i -= 1

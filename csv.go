@@ -2,7 +2,6 @@ package main
 
 import (
 	"os"
-	"strings"
 	"encoding/csv"
 )
 
@@ -31,8 +30,8 @@ func (r CSVReader) Read() (Person, error) {
 
 	fn := rec[0]
 	ln := rec[1]
-	ph := make_phones(rec[2], "CELL")
-	em := make_phones(rec[3], "HOME")
+	ph := make_map(rec[2], "CELL")
+	em := make_map(rec[3], "HOME")
 	nt := rec[4]
 	pt := rec[5]
 
@@ -41,15 +40,4 @@ func (r CSVReader) Read() (Person, error) {
 
 func (r CSVReader) Close() {
 	r.File.Close()
-}
-
-func make_phones(p, t string) Phones {
-	ret := make(map[string]string, 0)
-	arr := strings.Split(p, ";")
-
-	for _, el := range arr {
-		ret[el] = t
-	}
-
-	return ret
 }

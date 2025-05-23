@@ -20,27 +20,27 @@ func NewVCFWriter(file string) VCFWriter {
 	}
 }
 
-func formatPhone(p string) string {
-	return p[:3] + "-" + p[3:6] + "-" + p[6:]
-}
-
-func (w VCFWriter) Write(record Person) {
+func (w VCFWriter) Write(p Person) {
 	f := bufio.NewWriter(w.File)
 	defer f.Flush()
 
-	f.WriteString("BEGIN:VCARD\n")
-	f.WriteString("VERSION:2.1\n")
-	f.WriteString(fmt.Sprintf("N:%v;%v;;;\n", record.LastName, record.FirstName))
-	f.WriteString(fmt.Sprintf("FN:%v %v\n", record.FirstName, record.LastName))
-	for p, t := range record.Phones {
-		f.WriteString(fmt.Sprintf("TEL;%v:%v\n", t, formatPhone(p)))
+	write := func(str string, args ...any) {
+		f.WriteString(fmt.Sprintf(str, args...))
 	}
-	for e, t := range record.Emails {
-		f.WriteString(fmt.Sprintf("EMAIL;%v:%v\n", t, e))
+
+	write("BEGIN:VCARD\n")
+	write("VERSION:2.1\n")
+	write("N:%v;%v;;;\n", p.LastName, p.FirstName)
+	write("FN:%v %v\n", p.FirstName, p.LastName)
+	for ph, tp := range p.Phones {
+		write("TEL;%v:%v\n", tp, ph)
 	}
-	//write("NOTE:%v", record.Note)
-	//write("PHOTO;ENCODING=BASE64;%v", record.Photo)
-	f.WriteString("END:VCARD\n")
+	for em, tp := range p.Emails {
+		write("EMAIL;%v:%v\n", tp, em)
+	}
+	write("NOTE:%v\n", p.Note)
+	write("PHOTO;ENCODING=BASE64;%v\n", p.Photo)
+	write("END:VCARD\n")
 }
 
 func (w VCFWriter) Close() {
