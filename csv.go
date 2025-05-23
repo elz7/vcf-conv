@@ -1,8 +1,9 @@
 package main
 
 import (
-	"encoding/csv"
 	"os"
+	"strings"
+	"encoding/csv"
 )
 
 type CSVReader struct {
@@ -28,13 +29,27 @@ func (r CSVReader) Read() (Person, error) {
 		return Person{}, err
 	}
 
-	phones := make(map[string]string)
-	phones[rec[0]] = "CELL"
-	return Person{
-		Phones: phones,
-	}, nil
+	fn := rec[0]
+	ln := rec[1]
+	ph := make_phones(rec[2], "CELL")
+	em := make_phones(rec[3], "HOME")
+	nt := rec[4]
+	pt := rec[5]
+
+	return Person{fn, ln, ph, em, nt, pt}, nil
 }
 
 func (r CSVReader) Close() {
 	r.File.Close()
+}
+
+func make_phones(p, t string) Phones {
+	ret := make(map[string]string, 0)
+	arr := strings.Split(p, ";")
+
+	for _, el := range arr {
+		ret[el] = t
+	}
+
+	return ret
 }

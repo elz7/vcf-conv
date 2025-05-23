@@ -3,39 +3,9 @@ package main
 import (
 	"fmt"
 	"os"
-	"bytes"
 	"io"
 	"log"
 )
-
-type Person struct {
-	FirstName string
-	LastName  string
-	Phones    map[string]string
-	Emails    map[string]string
-	Note      string
-	Photo     string
-}
-
-func (p Person) String() string {
-	var buffer bytes.Buffer
-	buffer.WriteString(fmt.Sprintf("[%v:", p.FirstName + " " + p.LastName))
-	for p, _ := range p.Phones {
-		buffer.WriteString(fmt.Sprintf(" %v", p))
-	}
-	buffer.WriteString("]\n")
-	return buffer.String()
-}
-
-type Writer interface {
-	Write(rec Person)
-	Close()
-}
-
-type Reader interface {
-	Read() (Person, error)
-	Close()
-}
 
 func usage() {
 	fmt.Println("vcf-conv <input file> <output file>")
