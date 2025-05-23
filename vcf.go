@@ -1,9 +1,10 @@
 package main
 
 import (
-	"os"
-	"fmt"
 	"bufio"
+	"fmt"
+	"os"
+	"reflect"
 )
 
 type VCFWriter struct {
@@ -25,7 +26,19 @@ func (w VCFWriter) Write(p Person) {
 	defer f.Flush()
 
 	write := func(str string, args ...any) {
-		f.WriteString(fmt.Sprintf(str, args...))
+		proceed := false
+		for _, a := range args {
+			if !reflect.ValueOf(a).IsZero() {
+				proceed = true
+				break
+			}
+		}
+		if !proceed && len(args) != 0 {
+			fmt.Print(str)
+			return
+		}
+		f.WriteString(
+			fmt.Sprintf(str, args...))
 	}
 
 	write("BEGIN:VCARD\n")
