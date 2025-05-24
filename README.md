@@ -2,10 +2,10 @@
 
 Пример
 ```
-go run . phones.csv phones.vcf
+go run . phones.txt
 ```
 
-phones.csv
+phones.txt
 ```
 79001003020
 78002004040
