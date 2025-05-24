@@ -34,7 +34,6 @@ func (w VCFWriter) Write(p Person) {
 			}
 		}
 		if !proceed && len(args) != 0 {
-			fmt.Print(str)
 			return
 		}
 		f.WriteString(

@@ -27,6 +27,12 @@ func get_rand_name(phone string) (string, string) {
 		"Bycicle",
 		"Bitcoin",
 		"Woo",
+		"Knife",
+		"Dry",
+		"Monolith",
+		"Railway",
+		"Frog",
+		"Feet",
 	}
 
 	h := fnv.New64()
