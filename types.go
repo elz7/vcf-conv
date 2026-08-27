@@ -4,12 +4,12 @@ type Phones map[string]string
 type EMails map[string]string
 
 type Person struct {
-        FirstName string
-        LastName  string
-        Phones    map[string]string
-        Emails    map[string]string
-        Note      string
-        Photo     string
+	FirstName string
+	LastName  string
+	Phones    map[string]string
+	Emails    map[string]string
+	Note      string
+	Photo     string
 }
 
 type Reader interface {
@@ -18,6 +18,6 @@ type Reader interface {
 }
 
 type Writer interface {
-	Write(p Person)
+	Write(p *Person)
 	Close()
 }

@@ -1,8 +1,8 @@
 package main
 
 import (
-	"os"
 	"encoding/csv"
+	"os"
 )
 
 type CSVReader struct {
@@ -30,8 +30,8 @@ func (r CSVReader) Read() (Person, error) {
 
 	fn := rec[0]
 	ln := rec[1]
-	ph := make_map(rec[2], "CELL")
-	em := make_map(rec[3], "HOME")
+	ph := makeMap(rec[2], "CELL")
+	em := makeMap(rec[3], "HOME")
 	nt := rec[4]
 	pt := rec[5]
 

@@ -21,11 +21,11 @@ func NewVCFWriter(file string) VCFWriter {
 	}
 }
 
-func (w VCFWriter) Write(p Person) {
+func (w VCFWriter) Write(p *Person) {
 	f := bufio.NewWriter(w.File)
 	defer f.Flush()
 
-	write := func(str string, args ...any) {
+	write := func(format string, args ...any) {
 		proceed := false
 		for _, a := range args {
 			if !reflect.ValueOf(a).IsZero() {
@@ -36,8 +36,7 @@ func (w VCFWriter) Write(p Person) {
 		if !proceed && len(args) != 0 {
 			return
 		}
-		f.WriteString(
-			fmt.Sprintf(str, args...))
+		fmt.Fprintf(f, format, args...)
 	}
 
 	write("BEGIN:VCARD\n")

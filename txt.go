@@ -1,9 +1,9 @@
 package main
 
 import (
-	"os"
-	"io"
 	"bufio"
+	"io"
+	"os"
 	"strings"
 )
 
@@ -26,8 +26,8 @@ func (txt TxtReader) Read() (Person, error) {
 		return Person{}, io.EOF
 	}
 	str := txt.Scanner.Text()
-	fn, ln := get_rand_name(str)
-	ph := make_map(strings.Trim(str, ","), "CELL")
+	fn, ln := randName(str)
+	ph := makeMap(strings.Trim(str, ","), "CELL")
 	return Person{FirstName: fn, LastName: ln, Phones: ph}, nil
 }
 

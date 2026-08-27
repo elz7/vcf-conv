@@ -1,12 +1,12 @@
 package main
 
 import (
+	"fmt"
 	"hash/fnv"
 	"strings"
-	"fmt"
 )
 
-func get_rand_name(phone string) (string, string) {
+func randName(phone string) (string, string) {
 	fn := []string{
 		"Rose",
 		"Fire",
@@ -39,19 +39,19 @@ func get_rand_name(phone string) (string, string) {
 	h.Write([]byte(phone))
 	s := h.Sum64()
 
-	i1 := int(s/3)%len(fn)
-	i2 := int(2*s/3)%len(ln)
-	fmt.Println(i1,i2)
+	i1 := int(s/3) % len(fn)
+	i2 := int(2*s/3) % len(ln)
+	fmt.Println(i1, i2)
 	return fn[i1], ln[i2]
 }
 
-func make_map(v, t string) map[string]string {
-        ret := make(map[string]string, 0)
-        arr := strings.Split(v, ";")
+func makeMap(v, t string) map[string]string {
+	ret := make(map[string]string, 0)
+	arr := strings.SplitSeq(v, ";")
 
-        for _, el := range arr {
+	for el := range arr {
 		ret[el] = t
-        }
+	}
 
-        return ret
+	return ret
 }
