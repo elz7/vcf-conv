@@ -1,7 +1,8 @@
 package main
 
-type Phones map[string]string
-type EMails map[string]string
+import "errors"
+
+var ErrEmptyLine = errors.New("empty line")
 
 type Person struct {
 	FirstName string
@@ -9,15 +10,20 @@ type Person struct {
 	Phones    map[string]string
 	Emails    map[string]string
 	Note      string
-	Photo     string
 }
 
 type Reader interface {
 	Read() (Person, error)
-	Close()
+	Close() error
 }
 
 type Writer interface {
-	Write(p *Person)
-	Close()
+	Write(p Person)
+	Close() error
+}
+
+type CommandLine struct {
+	InputFile      string
+	OutputFile     string
+	PrintCSVFields bool
 }

@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"hash/fnv"
+	"path/filepath"
 	"strings"
 )
 
@@ -54,4 +55,27 @@ func makeMap(v, t string) map[string]string {
 	}
 
 	return ret
+}
+
+func getOrNone[T any](slice []T, index int) (T, bool) {
+	if index < len(slice) {
+		return slice[index], true
+	}
+	var zero T
+	return zero, false
+}
+
+func fileNameWithoutExtension(name string) string {
+	name = filepath.Base(name)
+
+	if name == "." || name == "" {
+		return "phones"
+	}
+
+	ext := filepath.Ext(name)
+	if ext == "" {
+		return name
+	}
+
+	return name[:len(name)-len(ext)]
 }

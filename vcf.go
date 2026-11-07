@@ -8,21 +8,19 @@ import (
 )
 
 type VCFWriter struct {
-	File *os.File
+	file *os.File
 }
 
-func NewVCFWriter(file string) VCFWriter {
+func NewVCFWriter(file string) (Writer, error) {
 	f, err := os.Create(file)
 	if err != nil {
-		panic(err)
+		return nil, err
 	}
-	return VCFWriter{
-		File: f,
-	}
+	return VCFWriter{f}, nil
 }
 
-func (w VCFWriter) Write(p *Person) {
-	f := bufio.NewWriter(w.File)
+func (w VCFWriter) Write(p Person) {
+	f := bufio.NewWriter(w.file)
 	defer f.Flush()
 
 	write := func(format string, args ...any) {
@@ -50,10 +48,9 @@ func (w VCFWriter) Write(p *Person) {
 		write("EMAIL;%v:%v\n", tp, em)
 	}
 	write("NOTE:%v\n", p.Note)
-	write("PHOTO;ENCODING=BASE64;%v\n", p.Photo)
 	write("END:VCARD\n")
 }
 
-func (w VCFWriter) Close() {
-	w.File.Close()
+func (w VCFWriter) Close() error {
+	return w.file.Close()
 }

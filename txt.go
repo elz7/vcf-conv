@@ -8,29 +8,34 @@ import (
 )
 
 type TxtReader struct {
-	File    *os.File
-	Scanner *bufio.Scanner
+	file    *os.File
+	scanner *bufio.Scanner
 }
 
-func NewTxtReader(file string) TxtReader {
+func NewTxtReader(file string) (Reader, error) {
 	f, err := os.Open(file)
 	if err != nil {
-		panic(err)
+		return nil, err
 	}
-	s := bufio.NewScanner(f)
-	return TxtReader{f, s}
+	return TxtReader{file: f, scanner: bufio.NewScanner(f)}, nil
 }
 
 func (txt TxtReader) Read() (Person, error) {
-	if !txt.Scanner.Scan() {
+	if !txt.scanner.Scan() {
 		return Person{}, io.EOF
 	}
-	str := txt.Scanner.Text()
-	fn, ln := randName(str)
-	ph := makeMap(strings.Trim(str, ","), "CELL")
+
+	line := txt.scanner.Text()
+	if line == "" {
+		return Person{}, ErrEmptyLine
+	}
+
+	fn, ln := randName(line)
+	ph := makeMap(strings.Trim(line, ","), "CELL")
+
 	return Person{FirstName: fn, LastName: ln, Phones: ph}, nil
 }
 
-func (r TxtReader) Close() {
-	r.File.Close()
+func (r TxtReader) Close() error {
+	return r.file.Close()
 }
